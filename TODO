@@ -1,0 +1,9 @@
+* implement not instant persistence
+  * save method
+  * create method
+  * have setters write to attrs hash
+  * getters
+  * dirty?
+* method of getting id(don't have to assign one)
+* figure out how to extend a class with a class OR use Redis::DataTypes::Class for marshal
+* invert values so you can find by them i.e. "user:1:name" is value, "user:name:value" is id

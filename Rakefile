@@ -5,12 +5,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "redis-types"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{TODO: a port of redis-model to a module for composition}
+    gem.description = %Q{TODO: this is my port of redis-module because I prefer composition over inheritance, cause then you can combine it with other orms. I also changed json parsing to yajl-ruby and tweaked a few other things to my preferences}
     gem.email = "wbsmith83@gmail.com"
     gem.homepage = "http://github.com/BrianTheCoder/redis-types"
     gem.authors = ["brianthecoder"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_development_dependency "rspec", ">= 0"
+    gem.add_dependency "redis-rb"
+    gem.add_dependency "yajl-ruby"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
