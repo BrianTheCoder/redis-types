@@ -14,6 +14,8 @@ class Redis
   autoload :DataTypes,    dir / 'data_types'
   
   module Types
+    class InvalidDataType < StandardError; end
+    
     def self.included(model)
       extend_core_types
       model.send :include, Extlib::Hook
@@ -55,9 +57,15 @@ class Redis
       private
       
       def redis_field(name, type, redis_type)
-        p type
-        redis_fields[name.to_s] = redis_type.new(redis, type)
+        redis_fields[name.to_s] = redis_type.new(redis, get_field_class(type))
         field_methods name, redis_type.name.split('::').last.downcase
+      end
+      
+      def get_field_class(klass)
+        return klass if klass.name =~ /Redis::DataTypes/
+        name = klass.name.split('::').last
+        raise InvalidDataType unless Redis::DataTypes.const_defined?(name)
+        Redis::DataTypes.const_get(name)
       end
             
       def field_methods(name, type) #:nodoc:
@@ -120,7 +128,7 @@ class Redis
       if name
         redis.delete field_key(name.to_s)
       else
-        self.class.redis_fields.each do |field|
+        self.class.redis_fields.each do |field, klass|
           redis.delete field_key(field)
         end
       end

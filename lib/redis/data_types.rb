@@ -33,7 +33,7 @@ class Redis
 
     class Json
       def self.dump(value); Yajl::Encoder.encode(value);                    end
-      def self.load(value); v && Yajl::Parser.parse(value);                 end
+      def self.load(value); value && Yajl::Parser.parse(value);             end
     end
   end
 end

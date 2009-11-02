@@ -34,13 +34,17 @@ describe Redis::Types do
   end
   
   describe 'fields' do
+    before do 
+      @project = Project.new
+      @_redis_mock = Spec::Mocks::Mock.new
+      @project.stub!(:redis).and_return(@_redis_mock)
+    end
+    
     {
       :name => :value,
       :users => :list,
       :commits => :set
-    }.each do |method, type|
-      before{ @project = Project.new }
-    
+    }.each do |method, type|    
       it "defines a getter method for #{method}" do
         @project.should respond_to(method)
       end
@@ -71,13 +75,13 @@ describe Redis::Types do
       Project.redis_fields['name'].marshal.should be_kind_of(String)
     end
     
-    describe 'a getter method' do
-    end
-    
     describe 'a setter method' do
     end
     
     describe 'a bool method' do
+    end
+    
+    describe 'a getter method' do
     end
   end
   
