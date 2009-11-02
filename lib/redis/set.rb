@@ -7,11 +7,11 @@ class Redis::Set
     :move             => "smove",
   }
   
-  def <<(value); redis.sadd key, marshal.dump(value);                     end
+  def <<(value); redis.sadd key, marshal.to_redis(value);                     end
   
-  def delete(value); redis.srem key, marshal.dump(value);                 end
+  def delete(value); redis.srem key, marshal.to_redis(value);                 end
   
-  def include?(value); redis.sismember(key, marshal.dump(value)) == 1;    end
+  def include?(value); redis.sismember(key, marshal.to_redis(value)) == 1;    end
   
   alias_method :add, :<<
   alias_method :remove, :delete
@@ -19,19 +19,19 @@ class Redis::Set
   alias_method :member?, :include?
   
   def members
-    redis.smembers(key).map{|value| marshal.load(value) }
+    redis.smembers(key).map{|value| marshal.from_redis(value) }
   end
   
   def intersect(*keys)
-    redis.sinter(key, *keys).map{|value| marshal.load(value) }
+    redis.sinter(key, *keys).map{|value| marshal.from_redis(value) }
   end
   
   def union(*keys)
-    redis.sunion(@key, *keys).map{|value| marshal.load(value) }
+    redis.sunion(@key, *keys).map{|value| marshal.from_redis(value) }
   end
   
   def diff(*keys)
-    redis.sdiff(key, *keys).map{|value| marshal.load(value) }
+    redis.sdiff(key, *keys).map{|value| marshal.from_redis(value) }
   end
   
   def length; redis.llen(key);                      end

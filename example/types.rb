@@ -19,11 +19,8 @@ end
 
 u = User.new(:id => 1)
 u.destroy
-p 'name'
 u.name = 'Joe'    
-p 'created'                
 u.created = DateTime.now   
-p 'profile'       
 u.profile = {                     
   :age => 23,                     
   :sex => 'M',                    
@@ -36,7 +33,6 @@ u.posts << {
 u.followers << 2                  
                                   
                                   
-p 'printing'                                  
 u = User.new(:id => 1)  
 p u.name.get                          
 p u.created.get.strftime('%m/%d/%Y')  

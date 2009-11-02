@@ -69,6 +69,14 @@ describe Redis::Types do
       it "sets the key #{method} in redis_fields" do
         Project.redis_fields.should have_key(method.to_s)
       end
+      
+      it "should dump the datatype to a string" do
+      
+      end
+      
+      it "should load the datatype to the class" do
+      
+      end
     end
   
     it "should default to String type" do

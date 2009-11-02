@@ -1,6 +1,6 @@
 = redis-types
 
-Description goes here.
+Right now this is crazy alpha, use at risk of death and destruction(or epic fail). The example from redis model passes, but I need to write a ton more specs before I'm comfortable promoting
 
 == Note on Patches/Pull Requests
  

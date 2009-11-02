@@ -17,13 +17,9 @@ class Redis
     class InvalidDataType < StandardError; end
     
     def self.included(model)
-      extend_core_types
+      Redis::DataTypes.define_data_types
       model.send :include, Extlib::Hook
       model.extend ClassMethods
-    end
-    
-    def self.extend_core_types
-      
     end
     
     module ClassMethods
@@ -48,24 +44,12 @@ class Redis
       def delete(id); self.find(id).destroy;                      end
       
       def find(id); self.new(:id => id);                          end
-      
-      def const_missing(name)
-        return Redis::DataTypes.const_get(name) if Redis::DataTypes.const_defined?(name)
-        super
-      end
             
       private
       
       def redis_field(name, type, redis_type)
-        redis_fields[name.to_s] = redis_type.new(redis, get_field_class(type))
+        redis_fields[name.to_s] = redis_type.new(redis, type)
         field_methods name, redis_type.name.split('::').last.downcase
-      end
-      
-      def get_field_class(klass)
-        return klass if klass.name =~ /Redis::DataTypes/
-        name = klass.name.split('::').last
-        raise InvalidDataType unless Redis::DataTypes.const_defined?(name)
-        Redis::DataTypes.const_get(name)
       end
             
       def field_methods(name, type) #:nodoc:
