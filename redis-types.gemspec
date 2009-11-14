@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{redis-types}
-  s.version = "0.1.4"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["brianthecoder"]
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
      "TODO",
      "VERSION",
      "example/types.rb",
+     "lib/redis/counter.rb",
      "lib/redis/data_types.rb",
      "lib/redis/field_proxy.rb",
      "lib/redis/list.rb",
