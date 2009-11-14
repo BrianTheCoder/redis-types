@@ -23,11 +23,11 @@ class Redis
     end
 
     module EpochTime
-      def to_redis(value) Time.at(value.to_i) end
-
-      def from_redis(value)
+      def to_redis(value)
         value.is_a?(DateTime) ? value.to_time.to_i : value.to_i
       end
+      
+      def from_redis(value) Time.at(value.to_i) end
     end
 
     module DateTime

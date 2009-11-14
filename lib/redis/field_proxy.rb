@@ -5,8 +5,12 @@ class Redis
     def initialize(redis, marshal)
       @redis    = redis
       @key      = key
-      @marshal  = marshal
+      @marshal  = marshal 
       check_for_redis_serialization
+    end
+    
+    def marshal 
+      @_mashall ||= @marshal.is_a?(String) ? Object.const_get(@marshal) : @marshal
     end
 
     def method_missing(method, *argv)
