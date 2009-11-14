@@ -11,7 +11,7 @@ class Redis::Set
   
   def delete(value); redis.srem key, marshal.to_redis(value)                 end
   
-  def include?(value); redis.sismember(key, marshal.to_redis(value)) == 1    end
+  def include?(value); redis.sismember(key, marshal.to_redis(value))         end
   
   alias_method :add, :<<
   alias_method :remove, :delete

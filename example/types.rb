@@ -34,9 +34,9 @@ u.followers << 2
                                   
                                   
 u = User.new(:id => 1)  
-p u.name.get                          
-p u.created.get.strftime('%m/%d/%Y')  
-p u.profile.get
+p u.name                          
+p u.created.strftime('%m/%d/%Y')  
+p u.profile
 p u.posts[0,20]                   
-p u.posts[0]                      
+p u.posts[0]              
 p u.followers.has_key?(2)         

@@ -1,6 +1,6 @@
 class Redis
   module DataTypes
-    TYPES = %w(String Integer Float EpochTime DateTime Json Yaml IPAddress FilePath Uri Slug)
+    TYPES = %w(Integer Float EpochTime DateTime Json Yaml IPAddress FilePath Uri Slug)
     def self.define_data_types
       TYPES.each do |data_type|
         if Object.const_defined?(data_type)
@@ -8,14 +8,12 @@ class Redis
         else
           klass = Object.const_set(data_type, Class.new)
         end
-        klass.extend const_get(data_type)
+        if const_defined?(data_type) 
+          klass.extend const_get(data_type)
+        end
       end
     end
-    
-    FROM = Proc.new{|value| value }
-    
-    TO = Proc.new{|value| value.to_s }
-    
+
     module Integer
       def from_redis(value); value && value.to_i end
     end
