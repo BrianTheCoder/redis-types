@@ -6,6 +6,7 @@ class Redis
       @redis    = redis
       @key      = key
       @marshal  = marshal
+      validate_marshal
     end
 
     def method_missing(method, *argv)
@@ -15,6 +16,11 @@ class Redis
     end
 
     protected
+    
+    def validate_mashal
+      @marshal.extend Redis::DataTypes::TO unless @marshal.responds_to?(:to_redis)
+      @marshal.extend Redis::DataTypes::FROM unless @marshal.responds_to?(:from_redis)
+    end
   
     def translate_method_name(m); m; end
   end

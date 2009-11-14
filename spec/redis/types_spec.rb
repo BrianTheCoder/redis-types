@@ -69,27 +69,19 @@ describe Redis::Types do
       it "sets the key #{method} in redis_fields" do
         Project.redis_fields.should have_key(method.to_s)
       end
-      
-      it "should dump the datatype to a string" do
-      
-      end
-      
-      it "should load the datatype to the class" do
-      
-      end
     end
   
     it "should default to String type" do
       Project.redis_fields['name'].marshal.should be_kind_of(String)
     end
     
-    describe 'a setter method' do
+    describe 'a value' do
     end
     
-    describe 'a bool method' do
+    describe 'a list' do
     end
     
-    describe 'a getter method' do
+    describe 'a set' do
     end
   end
   

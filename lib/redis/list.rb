@@ -33,8 +33,10 @@ class Redis::List
   
   def to_s; range(0, 100).join(', ');             end
   
-  def set(value)
+  def get; self                                   end
   
+  def set(value)
+    value.each{|item| redis.rpush(marshal.to_redis(item)) }
   end
   
   protected

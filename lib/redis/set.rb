@@ -7,11 +7,11 @@ class Redis::Set
     :move             => "smove",
   }
   
-  def <<(value); redis.sadd key, marshal.to_redis(value);                     end
+  def <<(value); redis.sadd key, marshal.to_redis(value)                     end
   
-  def delete(value); redis.srem key, marshal.to_redis(value);                 end
+  def delete(value); redis.srem key, marshal.to_redis(value)                 end
   
-  def include?(value); redis.sismember(key, marshal.to_redis(value)) == 1;    end
+  def include?(value); redis.sismember(key, marshal.to_redis(value)) == 1    end
   
   alias_method :add, :<<
   alias_method :remove, :delete
@@ -34,15 +34,17 @@ class Redis::Set
     redis.sdiff(key, *keys).map{|value| marshal.from_redis(value) }
   end
   
-  def length; redis.llen(key);                      end
+  def length; redis.llen(key)                      end
   
-  def to_s; members.join(', ');                     end
+  def to_s; members.join(', ')                     end
+  
+  def get; self                                    end
   
   def set(value)
-    
+    value.each{|item| redis.sadd(marshal.to_redis(item)) }
   end
 
   protected
 
-  def translate_method_name(m); COMMANDS[m];        end
+  def translate_method_name(m); COMMANDS[m]        end
 end

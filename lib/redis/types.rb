@@ -39,11 +39,11 @@ class Redis
         redis_field(name, type, ::Redis::Value)
       end
       
-      def redis(opts = {}); @@_redis ||= Redis.new(opts);         end
+      def redis(opts = {}); @@_redis ||= Redis.new(opts)         end
       
-      def delete(id); self.find(id).destroy;                      end
+      def delete(id); self.find(id).destroy                      end
       
-      def find(id); self.new(:id => id);                          end
+      def find(id); self.new(:id => id)                          end
             
       private
       
@@ -64,7 +64,7 @@ class Redis
       end
       
       def define_getter(name, type) #:nodoc:
-        class_eval "def #{name}; redis_#{type}_#{name}; end"
+        class_eval "def #{name}; redis_#{type}_#{name}.get; end"
       end
       
       def define_setter(name, type) #:nodoc:
@@ -84,7 +84,7 @@ class Redis
       end
     end
     
-    def field_key(name); "#{prefix}:#{id}:#{name}";     end
+    def field_key(name); "#{prefix}:#{id}:#{name}"     end
     
     def prefix #:nodoc:
       @prefix ||= self.class.prefix || self.class.to_s.
@@ -94,9 +94,7 @@ class Redis
         downcase
     end
     
-    def redis(opts = {}) #:nodoc:
-      self.class.redis(opts)
-    end
+    def redis(opts = {}); self.class.redis(opts) end
     
     def [](method)
       raise NoMethodError, "method is undefined: #{method}" unless respond_to?(method)
