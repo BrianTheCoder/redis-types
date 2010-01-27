@@ -4,7 +4,6 @@ class Redis
 
     def initialize(redis, marshal)
       @redis    = redis
-      @key      = key
       @marshal  = marshal 
       check_for_redis_serialization
     end

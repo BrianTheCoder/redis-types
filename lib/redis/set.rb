@@ -13,10 +13,13 @@ class Redis::Set
   
   def include?(value); redis.sismember(key, marshal.to_redis(value))         end
   
+  def length; redis.set_count(key)  end
+  
   alias_method :add, :<<
   alias_method :remove, :delete
   alias_method :has_key?, :include?
   alias_method :member?, :include?
+  alias_method :size, :length
   
   def members
     redis.smembers(key).map{|value| marshal.from_redis(value) }
@@ -33,12 +36,10 @@ class Redis::Set
   def diff(*keys)
     redis.sdiff(key, *keys).map{|value| marshal.from_redis(value) }
   end
+    
+  def to_s; members.join(', ')      end
   
-  def length; redis.llen(key)                      end
-  
-  def to_s; members.join(', ')                     end
-  
-  def get; self                                    end
+  def get; self                     end
   
   def set(value)
     value.each{|item| redis.sadd(marshal.to_redis(item)) }

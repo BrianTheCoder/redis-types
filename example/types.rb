@@ -2,6 +2,7 @@ require 'rubygems'
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'redis/types'
 
+Redis::Types.redis = Redis.new(:db => 2)
 
 class User
   include Redis::Types

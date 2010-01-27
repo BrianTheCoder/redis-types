@@ -14,6 +14,10 @@ class Redis
   autoload :DataTypes,    dir / 'data_types'
   
   module Types
+    def self.redis=(redis); @redis = redis end
+    
+    def self.redis; @redis end
+    
     class InvalidDataType < StandardError; end
     
     def self.included(model)
@@ -25,7 +29,11 @@ class Redis
     module ClassMethods
       attr_accessor :prefix
       
-      def redis_fields; @@_redis_fields ||= {}; end
+      class NotAValue < StandardError; end
+      
+      def redis_fields; @_redis_fields ||= {}; end
+      
+      def indexes; @_indexes ||= {}; end
              
       def set(name, type = 'String', opts = {})
         redis_field(name, type, ::Redis::Set)
@@ -39,11 +47,29 @@ class Redis
         redis_field(name, type, ::Redis::Value)
       end
       
-      def redis(opts = {}); @@_redis ||= Redis.new(opts)         end
+      def zset(name, type = 'String', opts = {})
+        redis_field(name, type, ::Redis::Zset)
+      end
+      
+      def redis
+        if !Redis::Types.redis.blank?
+          @redis = Redis::Types.redis
+        else
+          @_redis = Redis.new
+        end 
+      end
+      
+      def redis=(redis); @redis = redis end
       
       def delete(id); self.find(id).destroy                      end
       
       def find(id); self.new(:id => id)                          end
+      
+      alias :[] :find
+      
+      def to_redis(value); value.id.to_s                         end
+
+      def from_redis(value); [id]                                end
             
       private
       
@@ -76,7 +102,7 @@ class Redis
       end
     end
     
-    attr_accessor :id
+    attr_accessor :id, :redis
         
     def initialize(attrs = {})
       attrs.each do |name, value|
@@ -84,9 +110,11 @@ class Redis
       end
     end
     
+    def generate_id; self.id = self.class.redis.incr("#{self.class.to_s.snake_case}:nextId")  end
+    
     def field_key(name); "#{prefix}:#{id}:#{name}"     end
     
-    def prefix #:nodoc:
+    def prefix
       @prefix ||= self.class.prefix || self.class.to_s.
         sub(%r{(.*::)}, '').
         gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
@@ -94,16 +122,16 @@ class Redis
         downcase
     end
     
-    def redis(opts = {}); self.class.redis(opts) end
+    def redis; @redis ||= self.class.redis end
     
     def [](method)
       raise NoMethodError, "method is undefined: #{method}" unless respond_to?(method)
-      __send__(method)
+      send(method)
     end
     
     def []=(method, value)
       raise NoMethodError, "no setter method defined: #{method}=" unless respond_to?(:"#{method}=")
-      __send__(:"#{method}=", value)
+      send(:"#{method}=", value)
     end
     
     def destroy(name = nil)
