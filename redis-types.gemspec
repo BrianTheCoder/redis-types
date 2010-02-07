@@ -5,16 +5,17 @@
 
 Gem::Specification.new do |s|
   s.name = %q{redis-types}
-  s.version = "0.1.5"
+  s.version = "0.1.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["brianthecoder"]
-  s.date = %q{2009-11-14}
+  s.date = %q{2010-01-27}
   s.description = %q{this is so awesome it makes grown men cry}
   s.email = %q{wbsmith83@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README.rdoc",
+     "TODO"
   ]
   s.files = [
     ".document",
@@ -32,6 +33,7 @@ Gem::Specification.new do |s|
      "lib/redis/set.rb",
      "lib/redis/types.rb",
      "lib/redis/value.rb",
+     "lib/redis/zset.rb",
      "redis-types.gemspec",
      "spec/dump.rdb",
      "spec/redis/types_spec.rb",

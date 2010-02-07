@@ -35,19 +35,19 @@ class Redis
       
       def indexes; @_indexes ||= {}; end
              
-      def set(name, type = 'String', opts = {})
+      def set(name, type = String, opts = {})
         redis_field(name, type, ::Redis::Set)
       end
       
-      def list(name, type = 'String', opts = {})
+      def list(name, type = String, opts = {})
         redis_field(name, type, ::Redis::List)
       end
       
-      def value(name, type = 'String', opts = {})
+      def value(name, type = String, opts = {})
         redis_field(name, type, ::Redis::Value)
       end
       
-      def zset(name, type = 'String', opts = {})
+      def zset(name, type = String, opts = {})
         redis_field(name, type, ::Redis::Zset)
       end
       
@@ -59,17 +59,27 @@ class Redis
         end 
       end
       
-      def redis=(redis); @redis = redis end
+      def redis=(redis) 
+        @redis = redis 
+      end
       
-      def delete(id); self.find(id).destroy                      end
+      def delete(key)
+        self.find(key).destroy                      
+      end
       
-      def find(id); self.new(:id => id)                          end
+      def find(key)
+        self.new(:id => key)                          
+      end
       
       alias :[] :find
       
-      def to_redis(value); value.id.to_s                         end
+      def to_redis(value)
+        value.id.to_s
+      end
 
-      def from_redis(value); [id]                                end
+      def from_redis(value)
+        find(id)
+      end
             
       private
       
@@ -132,6 +142,12 @@ class Redis
     def []=(method, value)
       raise NoMethodError, "no setter method defined: #{method}=" unless respond_to?(:"#{method}=")
       send(:"#{method}=", value)
+    end
+    
+    def attributes
+      self.class.redis_fields.inject({}) do |hsh, (key, value)|
+        hsh[key] = self[key]
+      end
     end
     
     def destroy(name = nil)

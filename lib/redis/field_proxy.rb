@@ -9,13 +9,17 @@ class Redis
     end
     
     def marshal 
-      @_mashall ||= @marshal.is_a?(String) ? Object.const_get(@marshal) : @marshal
+      @_mashall ||= @marshal == String ? Object.const_get(@marshal) : @marshal
     end
 
     def method_missing(method, *argv)
       translated_method = translate_method_name(method)
       raise NoMethodError.new("Method '#{method}' is not defined") unless translated_method
       @redis.send translated_method, @key, *argv
+    end
+    
+    def destroy
+      @redis.delete(key)
     end
 
     protected
